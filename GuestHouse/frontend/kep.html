@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>ZASZLO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer>
+        const apiUrl = 'https://restcountries.com/v3.1/all';
+        
+        let jozaszlo="";
+        OrszagNevek()
+        async function OrszagNevek(){
+            let orszagok = [
+            rovidites=[],
+            zaszlo=[]
+            ];
+            let response= await fetch(apiUrl);
+            var data= await response.json();
+            for(i=0;i<4;i++){
+                let rnd=Math.floor(Math.random()*250)
+                orszagok[rovidites.push(data[rnd].name.common)]
+                orszagok[zaszlo.push(data[rnd].flags.png)]
+            }
+            document.getElementById("valasz1").innerHTML= orszagok[0][0]
+            document.getElementById("valasz2").innerHTML= orszagok[0][1]
+            document.getElementById("valasz3").innerHTML= orszagok[0][2]
+            document.getElementById("valasz4").innerHTML= orszagok[0][3]
+            let randomzaszlo=Math.floor(Math.random()*4)
+            document.getElementById("zaszlo").src=orszagok[1][randomzaszlo]
+            jozaszlo=randomzaszlo;
+        }
+        function Try(szam){
+            if(szam==jozaszlo){
+                document.getElementById("valasz"+(jozaszlo+1)).style.backgroundColor="green";
+                setTimeout(OrszagNevek,1000)
+                setTimeout(reset,1000)
+            }
+            else{
+                alert("Nem jó!");
+            }
+        }
+        function reset()
+        {
+            document.getElementById("valasz1").style.backgroundColor="black";
+            document.getElementById("valasz2").style.backgroundColor="black";
+            document.getElementById("valasz3").style.backgroundColor="black";
+            document.getElementById("valasz4").style.backgroundColor="black";
+        }
+    </script>
+</head>
+<body>
+    <div class="tartalom">
+        <div class="">
+            <img src="like.jpg" class="p-3" width="300px" height="300px" id="zaszlo">
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <button id="valasz1" class="text-center text-sm w-44 h-16 p-3 bg-black text-white rounded justify-center items-center align-center" onclick="Try(0)">Válasz1</button>
+                    </td>
+                    <td>
+                        <button id="valasz2" class="text-center text-sm w-44 h-16 p-3 bg-black text-white rounded justify-center items-center align-center" onclick="Try(1)">Válasz2</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="valasz3" class="text-center text-sm w-44 h-16 p-3 bg-black text-white rounded justify-center items-center align-center" onclick="Try(2)">Válasz3</button>
+                    </td>
+                    <td>
+                        <button id="valasz4" class="text-center text-sm	w-44 h-16 p-3 bg-black text-white rounded justify-center items-center align-center" onclick="Try(3)">Válasz4</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

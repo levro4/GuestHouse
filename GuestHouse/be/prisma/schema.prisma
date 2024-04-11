@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Szobak {
+  id               Int          @id @default(autoincrement())
+  szobaszam        Int          @unique
+  felnott_ferohely Int
+  gyermek_ferohely Int
+  ar_egesz_evben   Int
+  leiras           String
+  foglalasok       Foglalasok[]
+  kepek            Kepek[]
+
+  @@map("szobak")
+}
+
+model Vendeg {
+  id          Int          @id @default(autoincrement())
+  nev         String
+  email       String
+  telefonszam String
+  szul_dat    String
+  jelszo      String
+  isadmin     Boolean      @default(false)
+  foglalas    Boolean      @default(false)
+  foglalasok  Foglalasok[]
+}
+
+model Foglalasok {
+  id            Int    @id @default(autoincrement())
+  szoba         Szobak @relation(fields: [szid], references: [id],  onDelete: Cascade)
+  szid          Int
+  vendeg        Vendeg @relation(fields: [vendegid], references: [id],  onDelete: Cascade)
+  vendegid      Int
+  erkezes_datum String
+  tavozas_datum String
+  fizetett      Int
+}
+
+model Etel {
+  id        Int    @id @default(autoincrement())
+  nev       String
+  kategoria String
+  leiras    String
+  ar        Int
+  menu      Menu[]
+}
+
+model Menu {
+  id     Int  @id @default(autoincrement())
+  nap    Nap  @relation(fields: [napid], references: [id],  onDelete: Cascade)
+  napid  Int
+  etel   Etel @relation(fields: [etelid], references: [id],  onDelete: Cascade)
+  etelid Int
+}
+
+model Nap {
+  id           Int    @id @default(autoincrement())
+  hetazonosito Int
+  napnev       String
+  menu         Menu[]
+}
+
+model Kepek {
+  id       Int    @id @default(autoincrement())
+  szobakep String
+  szobak   Szobak @relation(fields: [szobaid], references: [id], onDelete: Cascade)
+  szobaid  Int
+}
+
+model EgyebInformaciok {
+  id          Int    @id @default(autoincrement())
+  panzio_nev  String
+  cim         String
+  telefonszam String
+}
